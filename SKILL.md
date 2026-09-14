@@ -63,7 +63,17 @@ python3 scripts/generate.py --list --kind video
 Fuzzy-match common aliases (seedream, kling, flux, wan, sora, veo, gpt-image, nano banana, grok, imagen, ideogram).
 If several variants match, the script picks the family default. Ask only if it still errors.
 Do not enumerate the full catalog unless the user asks what is available.
-Do not pass a duration/resolution the model list does not allow.
+Do not pass a ratio/duration/resolution the model's `--list` row does not allow.
+
+## Size
+
+Do not memorize sizes. If the user names a ratio, duration, or resolution, run `--list` for that `--kind` and copy values from **that model's row**.
+
+- `--ratio` ← `ratios`. Pixel models also accept `sizes` (`1024x576` or `16:9`). Default image `1:1`, video `16:9`.
+- `--duration` / `--resolution` ← those lists. Image `resolutions` are `1K`/`2K`/`4K` (Agnes also `3K`) when present.
+- `"fixed": true` (`dall-e-3`, `imagen`) → always `1024x1024`; do not pass `--ratio`.
+
+Defaults when omitted: image `1:1` (1024); Seedance 2.5 video `5` / `480p` / `16:9`.
 
 ## Commands
 

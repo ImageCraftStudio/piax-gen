@@ -22,6 +22,36 @@ POLL_INTERVAL = 3
 POLL_TIMEOUT = 600
 LOGIN_HEARTBEAT = 15
 
+# Hub size enums (pia-ui/lib/ai-hub/enrich-models.ts). Pixel models send imageSize as WxH.
+PIXEL_SIZES = ["512x512", "1024x1024", "768x1024", "576x1024", "1024x768", "1024x576"]
+PIXEL_SIZES_SEEDREAM5 = PIXEL_SIZES + ["2048x2048"]
+PIXEL_SIZES_SEEDREAM45 = PIXEL_SIZES + ["2048x2048", "4096x4096"]
+RATIO_TO_PIXEL = {
+    "1:1": "1024x1024",
+    "16:9": "1024x576",
+    "9:16": "576x1024",
+    "4:3": "1024x768",
+    "3:4": "768x1024",
+}
+
+RATIO_GROK_IMAGE = ["2:1", "20:9", "19.5:9", "16:9", "4:3", "3:2", "1:1", "2:3", "3:4", "9:16", "9:19.5", "9:20", "1:2"]
+RATIO_BANANA = ["1:1", "3:4", "4:3", "16:9", "9:16"]
+RATIO_BANANA2 = ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "16:9", "9:16"]
+RATIO_FLUX_IMAGE = ["1:1", "16:9", "9:16", "2:3", "3:2"]
+RATIO_IDEOGRAM = ["1:1", "16:9", "9:16", "2:3", "3:2", "10:16", "16:10", "4:3", "3:4", "1:3", "3:1"]
+RATIO_AGNES_IMAGE = ["21:9", "16:9", "4:3", "3:2", "1:1", "2:3", "3:4", "9:16"]
+RATIO_MUSE = ["21:9", "16:9", "4:3", "3:2", "1:1", "2:3", "3:4", "9:16", "9:21"]
+
+RATIO_VEO = ["16:9", "9:16"]
+RATIO_KLING = ["16:9", "9:16", "1:1"]
+RATIO_RUNWAY = ["16:9", "9:16", "1:1", "4:3", "3:4"]
+RATIO_VIDU = ["16:9", "9:16", "1:1"]
+RATIO_SEEDANCE = ["1:1", "16:9", "9:16", "4:3", "3:4"]
+RATIO_SEEDANCE25 = ["1:1", "21:9", "16:9", "9:16", "4:3", "3:4"]
+RATIO_VIDEO_21 = ["16:9", "9:16", "1:1", "4:3", "3:4", "21:9"]
+RATIO_LUMA = ["16:9", "9:16", "1:1", "4:3", "3:4", "21:9", "9:21"]
+RATIO_WAN = ["16:9", "9:16", "1:1", "4:3", "3:4"]
+
 # Homepage hub ids (pia-ui home imageModels / videoModels) minus chat redirects (27, 127)
 # and Midjourney stills (4), which use a dedicated MJ flow.
 IMAGE_MODELS = {
@@ -29,6 +59,7 @@ IMAGE_MODELS = {
         "path": "/ai-api/ai/images/gptImage25TaskSubmit",
         "agentId": "211",
         "size": "pixel",
+        "sizes": PIXEL_SIZES,
         "aliases": ["gpt-image-2.5", "gpt image 2.5", "gpt-image2.5", "gpt-image", "gpt image"],
         "default": True,
     },
@@ -36,19 +67,24 @@ IMAGE_MODELS = {
         "path": "/ai-api/ai/images/agnesImageTaskSubmit",
         "agentId": "205",
         "size": "ratio",
+        "ratios": RATIO_AGNES_IMAGE,
+        "resolutions": ["1K", "2K", "3K", "4K"],
+        "default_resolution": "1K",
+        "resolution_field": "size",
         "aliases": ["agnes-image", "agnes image", "agnes"],
-        "image_size": "1K",
     },
     "muse-image": {
         "path": "/ai-api/ai/images/museImageTaskSubmit",
         "agentId": "204",
         "size": "ratio",
+        "ratios": RATIO_MUSE,
         "aliases": ["muse-image", "muse image", "muse"],
     },
     "grok-imagine-image-2.0": {
         "path": "/ai-api/ai/images/grokImagineImageTaskSubmit",
         "agentId": "198",
         "size": "ratio",
+        "ratios": RATIO_GROK_IMAGE,
         "aliases": ["grok-imagine-image-2.0", "grok imagine 2", "grok image 2"],
         "family_default": True,
     },
@@ -56,34 +92,43 @@ IMAGE_MODELS = {
         "path": "/ai-api/ai/images/qwenImageTaskSubmit",
         "agentId": "192",
         "size": "pixel",
+        "sizes": PIXEL_SIZES,
         "aliases": ["qwen-image-3", "qwen image"],
     },
     "nano-banana-pro": {
         "path": "/ai-api/ai/images/geminiFlashImageTaskSubmit",
         "agentId": "117",
         "size": "ratio",
+        "ratios": RATIO_BANANA2,
+        "resolutions": ["1K", "2K", "4K"],
+        "default_resolution": "1K",
+        "resolution_field": "imageSize",
         "api_model": "gemini-3-pro-image",
         "aliases": ["nano-banana-pro", "nano banana pro", "banana pro", "gemini-3-pro-image"],
-        "image_size": "1K",
     },
     "gpt-image2": {
         "path": "/ai-api/ai/images/gptImageTaskSubmit",
         "agentId": "181",
         "size": "pixel",
+        "sizes": PIXEL_SIZES,
         "aliases": ["gpt-image2", "gpt-image-2", "gpt image 2"],
     },
     "nano-banana-2": {
         "path": "/ai-api/ai/images/geminiFlashImageTaskSubmit",
         "agentId": "142",
         "size": "ratio",
+        "ratios": RATIO_BANANA2,
+        "resolutions": ["1K", "2K", "4K"],
+        "default_resolution": "1K",
+        "resolution_field": "imageSize",
         "aliases": ["nano-banana-2", "nano banana 2", "nano banana", "banana"],
-        "image_size": "1K",
         "family_default": True,
     },
     "nano-banana": {
         "path": "/ai-api/ai/images/geminiFlashImageTaskSubmit",
         "agentId": "91",
         "size": "ratio",
+        "ratios": RATIO_BANANA,
         "api_model": "gemini-2.5-flash-image",
         "aliases": ["nano-banana", "gemini-2.5-flash-image", "gemini flash image"],
     },
@@ -91,6 +136,7 @@ IMAGE_MODELS = {
         "path": "/ai-api/ai/images/imagenTaskSubmit",
         "agentId": "73",
         "size": "imagen",
+        "sizes": ["1024x1024"],
         "api_model": "imagen-4.0-ultra-generate-preview-06-06",
         "aliases": ["imagen", "imagen 4", "imagen-4"],
     },
@@ -98,6 +144,7 @@ IMAGE_MODELS = {
         "path": "/ai-api/ai/images/imageGenerationTaskSubmit",
         "agentId": "3",
         "size": "dalle",
+        "sizes": ["1024x1024"],
         "api_model": "dall-e-3",
         "aliases": ["dall-e-3", "dalle", "dall e", "dall-e"],
     },
@@ -105,6 +152,7 @@ IMAGE_MODELS = {
         "path": "/ai-api/ai/flux/task/submit",
         "agentId": "2",
         "size": "flux",
+        "ratios": RATIO_FLUX_IMAGE,
         "api_model": "flux-2-pro",
         "aliases": ["flux", "flux 2", "flux 2 pro"],
     },
@@ -112,30 +160,35 @@ IMAGE_MODELS = {
         "path": "/ai-api/ai/ideogram/task/submit",
         "agentId": "25",
         "size": "ideogram",
+        "ratios": RATIO_IDEOGRAM,
         "aliases": ["ideogram", "ideogram 2"],
     },
     "grok-imagine-image": {
         "path": "/ai-api/ai/images/grokImagineImageTaskSubmit",
         "agentId": "135",
         "size": "ratio",
+        "ratios": RATIO_GROK_IMAGE,
         "aliases": ["grok-imagine-image", "grok image"],
     },
     "z-image": {
         "path": "/ai-api/ai/images/z-imageTaskSubmit",
         "agentId": "133",
         "size": "pixel",
+        "sizes": PIXEL_SIZES,
         "aliases": ["z-image", "z image"],
     },
     "seedream4.5": {
         "path": "/ai-api/ai/images/seedreamTaskSubmit",
         "agentId": "125",
         "size": "pixel",
+        "sizes": PIXEL_SIZES_SEEDREAM45,
         "aliases": ["seedream4.5", "seedream 4.5"],
     },
     "seedream5": {
         "path": "/ai-api/ai/images/seedreamTaskSubmit",
         "agentId": "155",
         "size": "pixel",
+        "sizes": PIXEL_SIZES_SEEDREAM5,
         "aliases": ["seedream5", "seedream 5", "seedream"],
         "family_default": True,
     },
@@ -143,6 +196,7 @@ IMAGE_MODELS = {
         "path": "/ai-api/ai/images/wanImageTaskSubmit",
         "agentId": "157",
         "size": "pixel",
+        "sizes": PIXEL_SIZES,
         "aliases": ["wan2.7-pro", "wan 2.7 pro", "wan image"],
     },
 }
@@ -154,6 +208,7 @@ VIDEO_MODELS = {
         "aliases": ["gemini-omni-flash", "gemini omni", "omni flash"],
         "durations": [5, 8, 10],
         "resolutions": ["360p", "720p", "1080p", "4k"],
+        "ratios": RATIO_VEO,
         "default_duration": 8,
         "default_resolution": "720p",
     },
@@ -163,6 +218,7 @@ VIDEO_MODELS = {
         "aliases": ["agnes-video", "agnes video"],
         "durations": [5, 8, 10, 12],
         "resolutions": ["720P"],
+        "ratios": RATIO_VIDEO_21,
         "default_duration": 5,
         "default_resolution": "720P",
         "video_style": "agnes",
@@ -174,6 +230,7 @@ VIDEO_MODELS = {
         "family_default": True,
         "durations": [5, 10, 15, 20, 25, 30],
         "resolutions": ["480p", "720p", "1080p"],
+        "ratios": RATIO_WAN,
         "default_duration": 5,
         "default_resolution": "720p",
     },
@@ -184,6 +241,7 @@ VIDEO_MODELS = {
         "default": True,
         "durations": [5, 10, 15, 20],
         "resolutions": ["480p", "720p"],
+        "ratios": RATIO_SEEDANCE25,
         "default_duration": 5,
         "default_resolution": "480p",
     },
@@ -193,6 +251,7 @@ VIDEO_MODELS = {
         "aliases": ["flux-3", "flux 3", "flux video"],
         "durations": [5, 8, 10, 15],
         "resolutions": ["720p", "1080p"],
+        "ratios": RATIO_VIDEO_21,
         "default_duration": 5,
         "default_resolution": "720p",
     },
@@ -203,6 +262,7 @@ VIDEO_MODELS = {
         "family_default": True,
         "durations": [5, 8, 10],
         "resolutions": ["480p", "720p", "1080p"],
+        "ratios": RATIO_SEEDANCE,
         "default_duration": 5,
         "default_resolution": "480p",
     },
@@ -212,6 +272,7 @@ VIDEO_MODELS = {
         "aliases": ["minimax-h3", "minimax h3", "minimax"],
         "durations": [5, 8, 12, 15],
         "resolutions": ["768p"],
+        "ratios": RATIO_VIDEO_21,
         "default_duration": 5,
         "default_resolution": "768p",
     },
@@ -222,6 +283,7 @@ VIDEO_MODELS = {
         "family_default": True,
         "durations": [5, 10, 15],
         "resolutions": ["720p", "1080p"],
+        "ratios": RATIO_SEEDANCE,
         "default_duration": 5,
         "default_resolution": "720p",
     },
@@ -231,6 +293,7 @@ VIDEO_MODELS = {
         "aliases": ["wan-2.7", "wan 2.7"],
         "durations": [5, 10, 15],
         "resolutions": ["720p", "1080p"],
+        "ratios": RATIO_WAN,
         "default_duration": 5,
         "default_resolution": "720p",
     },
@@ -241,6 +304,7 @@ VIDEO_MODELS = {
         "family_default": True,
         "durations": [4, 6, 8],
         "resolutions": ["720p", "1080p"],
+        "ratios": RATIO_VEO,
         "default_duration": 4,
         "default_resolution": "720p",
     },
@@ -251,6 +315,7 @@ VIDEO_MODELS = {
         "family_default": True,
         "durations": [4, 8, 12],
         "resolutions": ["720p"],
+        "ratios": RATIO_VEO,
         "default_duration": 4,
         "default_resolution": "720p",
     },
@@ -260,6 +325,7 @@ VIDEO_MODELS = {
         "aliases": ["sora2-pro", "sora 2 pro", "sora pro"],
         "durations": [4, 8, 12],
         "resolutions": ["720p", "1080p"],
+        "ratios": RATIO_VEO,
         "default_duration": 4,
         "default_resolution": "720p",
     },
@@ -269,6 +335,7 @@ VIDEO_MODELS = {
         "aliases": ["veo3", "veo 3"],
         "durations": [8],
         "resolutions": ["720p", "1080p"],
+        "ratios": RATIO_VEO,
         "default_duration": 8,
         "default_resolution": "720p",
     },
@@ -278,6 +345,7 @@ VIDEO_MODELS = {
         "aliases": ["veo3.1", "veo 3.1"],
         "durations": [4, 6, 8],
         "resolutions": ["720p", "1080p"],
+        "ratios": RATIO_VEO,
         "default_duration": 4,
         "default_resolution": "720p",
     },
@@ -298,6 +366,7 @@ VIDEO_MODELS = {
         "aliases": ["seedance-1-0-lite", "seedance 1.0", "seedance lite"],
         "durations": [5, 10],
         "resolutions": ["480p", "720p", "1080p"],
+        "ratios": RATIO_SEEDANCE,
         "default_duration": 5,
         "default_resolution": "480p",
     },
@@ -307,6 +376,7 @@ VIDEO_MODELS = {
         "aliases": ["vidu-q1", "vidu"],
         "durations": [5],
         "resolutions": ["720p"],
+        "ratios": RATIO_VIDU,
         "default_duration": 5,
         "default_resolution": "720p",
     },
@@ -316,6 +386,7 @@ VIDEO_MODELS = {
         "aliases": ["luma-ray-2-0", "luma", "luma ray"],
         "durations": [5, 10],
         "resolutions": ["540p", "720p", "1080p", "4k"],
+        "ratios": RATIO_LUMA,
         "default_duration": 5,
         "default_resolution": "540p",
     },
@@ -325,6 +396,7 @@ VIDEO_MODELS = {
         "aliases": ["runway-gen-4-turbo", "runway", "runway gen 4"],
         "durations": [5, 10],
         "resolutions": ["720p"],
+        "ratios": RATIO_RUNWAY,
         "default_duration": 5,
         "default_resolution": "720p",
     },
@@ -334,6 +406,7 @@ VIDEO_MODELS = {
         "aliases": ["kling"],
         "durations": [5, 10],
         "resolutions": ["720p"],
+        "ratios": RATIO_KLING,
         "default_duration": 5,
         "default_resolution": "720p",
         "api_model": "V3.0-Std",
@@ -344,6 +417,7 @@ VIDEO_MODELS = {
         "aliases": ["wan-2.6", "wan 2.6"],
         "durations": [5, 10, 15],
         "resolutions": ["720p", "1080p"],
+        "ratios": ["16:9"],
         "default_duration": 5,
         "default_resolution": "720p",
     },
@@ -353,6 +427,7 @@ VIDEO_MODELS = {
         "aliases": ["seedance-1-5-pro", "seedance 1.5"],
         "durations": [5, 10],
         "resolutions": ["480p", "720p", "1080p"],
+        "ratios": RATIO_SEEDANCE,
         "default_duration": 5,
         "default_resolution": "480p",
     },
@@ -362,6 +437,7 @@ VIDEO_MODELS = {
         "aliases": ["grok-imagine-video", "grok imagine video"],
         "durations": [5, 8, 10],
         "resolutions": ["480p", "720p"],
+        "ratios": RATIO_SEEDANCE,
         "default_duration": 5,
         "default_resolution": "480p",
     },
@@ -371,6 +447,7 @@ VIDEO_MODELS = {
         "aliases": ["seedance-2-0", "seedance 2.0", "seedance 2"],
         "durations": [5, 8, 12, 15],
         "resolutions": ["720p"],
+        "ratios": RATIO_SEEDANCE25,
         "default_duration": 5,
         "default_resolution": "720p",
     },
@@ -380,19 +457,10 @@ VIDEO_MODELS = {
         "aliases": ["happy-horse-1.0", "happy horse 1.0"],
         "durations": [5, 10, 15],
         "resolutions": ["720p", "1080p"],
+        "ratios": RATIO_SEEDANCE,
         "default_duration": 5,
         "default_resolution": "720p",
     },
-}
-
-RATIO_TO_PIXEL = {
-    "1:1": "1024x1024",
-    "16:9": "1024x576",
-    "9:16": "576x1024",
-    "3:4": "768x1024",
-    "4:3": "1024x768",
-    "3:2": "1024x768",
-    "2:3": "768x1024",
 }
 
 
@@ -803,12 +871,10 @@ def upload_local(key, path):
     return files[0]["url"]
 
 
-def pixel_size(ratio):
-    if not ratio:
-        return "1024x1024"
-    if "x" in ratio.lower():
-        return ratio
-    return RATIO_TO_PIXEL.get(ratio, "1024x1024")
+def same_choice(value, item):
+    if value == item:
+        return True
+    return str(value).lower() == str(item).lower()
 
 
 def pick_allowed(value, allowed, fallback, label, model):
@@ -818,8 +884,9 @@ def pick_allowed(value, allowed, fallback, label, model):
         if fallback in allowed:
             return fallback
         return allowed[0]
-    if value in allowed:
-        return value
+    for item in allowed:
+        if same_choice(value, item):
+            return item
     fail(
         "generation_failed",
         "%s %r is not supported by %s. Use one of: %s"
@@ -832,11 +899,131 @@ def pick_allowed(value, allowed, fallback, label, model):
     )
 
 
+def ratio_aliases_for_sizes(sizes):
+    return [ratio for ratio, px in RATIO_TO_PIXEL.items() if px in (sizes or [])]
+
+
+def default_ratio(meta, kind):
+    ratios = meta.get("ratios") or []
+    sizes = meta.get("sizes") or []
+    if kind == "video":
+        if "16:9" in ratios:
+            return "16:9"
+        return ratios[0] if ratios else None
+    if "1:1" in ratios:
+        return "1:1"
+    if RATIO_TO_PIXEL.get("1:1") in sizes:
+        return "1:1"
+    if ratios:
+        return ratios[0]
+    if sizes:
+        return sizes[0]
+    return None
+
+
+def resolve_pixel_size(meta, value, slug):
+    sizes = meta.get("sizes") or []
+    allowed = ratio_aliases_for_sizes(sizes) + sizes
+    if value is None:
+        fallback = RATIO_TO_PIXEL["1:1"]
+        return fallback if fallback in sizes else sizes[0]
+    for item in sizes:
+        if same_choice(value, item):
+            return item
+    mapped = RATIO_TO_PIXEL.get(value)
+    if mapped and mapped in sizes:
+        return mapped
+    fail(
+        "generation_failed",
+        "ratio %r is not supported by %s. Use one of: %s" % (value, slug, ", ".join(allowed)),
+        http=422,
+        url="",
+        cta="",
+        extra={"model": slug},
+        exit_code=5,
+    )
+
+
+def flux_dimensions(ratio):
+    # Match pia-ui calculateDimensions(ratio, 1024) then swapped width/height.
+    height_ratio, width_ratio = [float(part) for part in ratio.split(":")]
+    factor = 1024.0 / height_ratio
+    width = int(round(width_ratio * factor))
+    height = int(round(height_ratio * factor))
+    max_size = 1440
+    if width > max_size or height > max_size:
+        scale = min(max_size / float(width), max_size / float(height))
+        width = int(round(width * scale))
+        height = int(round(height * scale))
+    width = (width // 32) * 32
+    height = (height // 32) * 32
+    return height, width
+
+
+def apply_image_resolution(body, meta, args, slug):
+    allowed = meta.get("resolutions") or []
+    if args.resolution and not allowed:
+        fail(
+            "generation_failed",
+            "%s has no --resolution. Use --ratio from --list." % slug,
+            http=422,
+            url="",
+            cta="",
+            extra={"model": slug},
+            exit_code=5,
+        )
+    if not allowed:
+        return
+    value = pick_allowed(
+        args.resolution,
+        allowed,
+        meta.get("default_resolution"),
+        "resolution",
+        slug,
+    )
+    field = meta.get("resolution_field") or "imageSize"
+    body[field] = value
+
+
 def build_image_body(slug, meta, args, image_urls):
     style = meta.get("size") or "pixel"
     api_model = meta.get("api_model") or slug
+    if style in ("imagen", "dalle"):
+        if args.ratio:
+            fail(
+                "generation_failed",
+                "%s is always 1024x1024. Do not pass --ratio." % slug,
+                http=422,
+                url="",
+                cta="",
+                extra={"model": slug},
+                exit_code=5,
+            )
+        if args.resolution:
+            fail(
+                "generation_failed",
+                "%s has no --resolution." % slug,
+                http=422,
+                url="",
+                cta="",
+                extra={"model": slug},
+                exit_code=5,
+            )
+        body = {
+            "productNo": "pia",
+            "model": api_model,
+            "agentId": meta["agentId"],
+            "prompt": args.prompt,
+            "n": 1,
+            "size": "1024x1024",
+        }
+        if image_urls:
+            body["urls"] = image_urls
+            if len(image_urls) == 1:
+                body["url"] = image_urls[0]
+        return body
     if style == "ideogram":
-        ratio = args.ratio or "1:1"
+        ratio = pick_allowed(args.ratio, meta.get("ratios") or [], default_ratio(meta, "image"), "ratio", slug)
         return {
             "productNo": "pia",
             "agentId": meta["agentId"],
@@ -856,22 +1043,40 @@ def build_image_body(slug, meta, args, image_urls):
         "n": 1,
     }
     if style == "pixel":
-        body["imageSize"] = pixel_size(args.ratio)
-    elif style in ("imagen", "dalle"):
-        body["size"] = "1024x1024"
+        body["imageSize"] = resolve_pixel_size(meta, args.ratio, slug)
+        if args.resolution:
+            fail(
+                "generation_failed",
+                "%s uses --ratio (or a size like 1024x1024), not --resolution." % slug,
+                http=422,
+                url="",
+                cta="",
+                extra={"model": slug},
+                exit_code=5,
+            )
     elif style == "flux":
-        px = pixel_size(args.ratio or "1:1")
-        width, height = px.lower().split("x")
-        body["width"] = int(width)
-        body["height"] = int(height)
-        body["aspect_ratio"] = args.ratio or "1:1"
+        ratio = pick_allowed(args.ratio, meta.get("ratios") or [], default_ratio(meta, "image"), "ratio", slug)
+        width, height = flux_dimensions(ratio)
+        body["width"] = width
+        body["height"] = height
+        body["aspect_ratio"] = ratio
         body["safety_tolerance"] = 2
         body["prompt_upsampling"] = False
+        if args.resolution:
+            fail(
+                "generation_failed",
+                "%s has no --resolution. Use --ratio." % slug,
+                http=422,
+                url="",
+                cta="",
+                extra={"model": slug},
+                exit_code=5,
+            )
     else:
-        body["aspectRatio"] = args.ratio or "1:1"
-        if meta.get("image_size"):
-            body["imageSize"] = args.resolution or meta["image_size"]
-            body["size"] = body["imageSize"]
+        body["aspectRatio"] = pick_allowed(
+            args.ratio, meta.get("ratios") or [], default_ratio(meta, "image"), "ratio", slug
+        )
+        apply_image_resolution(body, meta, args, slug)
     if image_urls:
         body["urls"] = image_urls
         if len(image_urls) == 1:
@@ -894,7 +1099,8 @@ def build_video_body(slug, meta, args, image_url):
         "resolution",
         slug,
     )
-    aspect = args.ratio or "16:9"
+    ratios = meta.get("ratios") or []
+    aspect = pick_allowed(args.ratio, ratios, default_ratio(meta, "video"), "ratio", slug) if ratios else None
     vtype = "image-to-video" if image_url else "text-to-video"
     api_model = meta.get("api_model") or slug
     style = meta.get("video_style") or "standard"
@@ -917,8 +1123,9 @@ def build_video_body(slug, meta, args, image_url):
             "mode": "keyframe" if image_url else "text",
             "seconds": duration,
             "size": resolution,
-            "aspectRatio": aspect,
         }
+        if aspect:
+            body["aspectRatio"] = aspect
         if image_url:
             body["firstFrame"] = image_url
         return body
@@ -932,8 +1139,9 @@ def build_video_body(slug, meta, args, image_url):
         "length": duration,
         "seconds": duration,
         "resolution": resolution,
-        "aspectRatio": aspect,
     }
+    if aspect:
+        body["aspectRatio"] = aspect
     if image_url:
         body["imageUrl"] = image_url
     return body
@@ -988,8 +1196,23 @@ def list_models(kind):
         }
         if meta.get("durations"):
             row["durations"] = meta["durations"]
+            row["default_duration"] = meta.get("default_duration")
         if meta.get("resolutions"):
             row["resolutions"] = meta["resolutions"]
+            row["default_resolution"] = meta.get("default_resolution")
+        if meta.get("sizes"):
+            row["sizes"] = meta["sizes"]
+        if meta.get("ratios"):
+            row["ratios"] = meta["ratios"]
+        elif meta.get("sizes") and meta.get("size") == "pixel":
+            row["ratios"] = ratio_aliases_for_sizes(meta["sizes"])
+            row["ratio_aliases"] = {ratio: RATIO_TO_PIXEL[ratio] for ratio in row["ratios"]}
+        if meta.get("size") in ("dalle", "imagen"):
+            row["fixed"] = True
+        else:
+            default = default_ratio(meta, "video" if kind == "video" else "image")
+            if default:
+                row["default_ratio"] = default
         rows.append(row)
     print(json.dumps({"ok": True, "kind": kind if kind == "video" else "image", "models": rows}, indent=2))
 
@@ -1034,6 +1257,8 @@ def main():
         fail_generation("This model needs a reference image. Pass --image or pick another model.", kind, slug)
     if kind == "video":
         build_video_body(slug, meta, args, None)
+    else:
+        build_image_body(slug, meta, args, [])
 
     key = load_api_key()
     if not key:

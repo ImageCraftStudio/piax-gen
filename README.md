@@ -1,5 +1,7 @@
 # piax-gen
 
+https://www.piax.org/gen-ai-skills
+
 ```bash
 npx skills add ImageCraftStudio/piax-gen
 ```
@@ -16,3 +18,5 @@ Defaults (omit `--model`):
 
 - image / image_edit → `gpt-image-2.5`
 - video → `seedance-2.5` (5s / 480p / 16:9)
+
+Latest models on the homepage also work when named: Agnes, Wan 3.0, Gemini Omni Flash, Flux 3, and the rest of the catalog.

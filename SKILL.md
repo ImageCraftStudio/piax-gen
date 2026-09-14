@@ -1,6 +1,6 @@
 ---
 name: piax-gen
-description: Generate and edit images or generate videos via PIAX. Use when the user asks to create or edit an image, poster, hero, cover, thumbnail, logo, icon, wallpaper, or to generate a video, reel, or image-to-video, including GPT Image, Seedance, Kling, Flux, Sora, Veo, Wan, Nano Banana, Imagen, Ideogram, Grok, Agnes, Muse, Luma, Runway, Vidu, MiniMax, Happy Horse.
+description: Generate and edit images or generate videos via PIAX. Use when the user asks to create or edit an image, poster, hero, cover, thumbnail, logo, icon, wallpaper, or to generate a video, reel, or image-to-video, including GPT Image 2.5, Seedance 2.5, Agnes, Wan 3.0, Gemini Omni Flash, Flux 3, GPT Image, Seedance, Kling, Flux, Sora, Veo, Wan, Nano Banana, Imagen, Ideogram, Grok, Muse, Luma, Runway, Vidu, MiniMax, Happy Horse.
 ---
 
 # PIAX media generation

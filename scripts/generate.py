@@ -17,6 +17,7 @@ CONNECT_PAGE = "https://www.piax.org/connect"
 PRICING = "https://www.piax.org/pricing"
 CREDITS = "https://www.piax.org/pricing/credits"
 CREDENTIALS_FILE = os.path.expanduser(os.environ.get("PIAX_CREDENTIALS", "~/.piax/credentials.json"))
+USER_AGENT = "piax-gen"
 POLL_INTERVAL = 3
 POLL_TIMEOUT = 600
 LOGIN_HEARTBEAT = 15
@@ -704,6 +705,7 @@ def resolve_model(kind, name):
 def api_request(method, path, key, body=None, files=None):
     url = DEFAULT_API + path
     headers = {
+        "User-Agent": USER_AGENT,
         "X-PIAX-Channel": "skill",
         "Accept": "application/json",
     }
@@ -963,7 +965,7 @@ def download(url, out_path):
     folder = os.path.dirname(os.path.abspath(out_path))
     if folder:
         os.makedirs(folder, exist_ok=True)
-    req = urllib.request.Request(url, headers={"User-Agent": "piax-gen"})
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=120) as resp, open(out_path, "wb") as f:
         f.write(resp.read())
 

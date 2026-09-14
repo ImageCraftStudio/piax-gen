@@ -8,7 +8,7 @@ npx skills add ImageCraftStudio/piax-gen
 
 The CLI places this skill where Cursor, Claude Code, Codex, and other agents load skills. Python 3 is required.
 
-Zip fallback (ChatGPT, or no npx): https://www.piax.org/skills/piax-gen.zip
+Zip fallback (ChatGPT, or no npx): https://www.piax.org/gen-ai-skills/piax-gen.zip
 
 Ask the agent to generate an image or video. If not signed in, it opens PIAX in the browser. No API key copy/export. Switch accounts with `--logout` then `--login`.
 
